@@ -4,7 +4,7 @@
 ![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg)
 [![License MIT](https://img.shields.io/badge/license-MIT-magenta.svg)](https://github.com/dagronf/Furl/blob/master/LICENSE) 
 ![SPM](https://img.shields.io/badge/spm-compatible-maroon.svg)
-![Build](https://img.shields.io/github/actions/workflow/status/dagronf/SwiftSubtitles/swift.yml)
+![Build](https://img.shields.io/github/actions/workflow/status/dagronf/Furl/swift.yml)
 
 ![macOS](https://img.shields.io/badge/macOS-10.13+-darkblue)
 ![iOS](https://img.shields.io/badge/iOS-13+-crimson)
