@@ -50,16 +50,16 @@ try childFolder.actualize()
 try tempFolder.delete()
 ```
 
-## API
+# API
 
-### Location
+## Location
 
 A `Location` is the common sub-unit of a `File` and a `Folder`.  It contains routines that are 
 common to both files and folders.
 
 You never explicitly create a `Location`, rather you will work with `File` and `Folder`. 
 
-#### Attributes
+### Attributes
 
 | API                 | Description                                        |
 |:--------------------|:---------------------------------------------------|
@@ -81,7 +81,7 @@ You never explicitly create a `Location`, rather you will work with `File` and `
 | `isLocked`          | Is the location locked? (read/write)               |
 | `attributes`        | The location's attributes                          |
 
-#### Basic permissions
+### Basic permissions
 
 | API            | Description                    |
 |:---------------|:-------------------------------|
@@ -90,7 +90,7 @@ You never explicitly create a `Location`, rather you will work with `File` and `
 | `isExecutable` | The location can be executed   |
 | `isDeletable`  | The location is deletable      |
 
-#### Universal Type Identifier
+### Universal Type Identifier
 
 | API                | Description                                     |
 |:-------------------|:------------------------------------------------|
@@ -98,7 +98,7 @@ You never explicitly create a `Location`, rather you will work with `File` and `
 | `typeIdentifier()` | The type identifier for the location            |
 | `conformsTo()`     | Does this location conform to the specified UTI |
 
-#### Operations
+### Operations
 
 | API                | Description                            | Notes      |
 |:-------------------|:---------------------------------------|:-----------|
@@ -109,7 +109,7 @@ You never explicitly create a `Location`, rather you will work with `File` and `
 | `moveToTrash()`    | Move the file/folder to the trash      | macOS only |
 | `revealInFinder()` | Reveal the file/folder in the Finder   | macOS only |
 
-#### Symlinks and Aliases
+### Symlinks and Aliases
 
 | API                   | Description                                | Notes      |
 |:----------------------|:-------------------------------------------|:-----------|
@@ -118,7 +118,7 @@ You never explicitly create a `Location`, rather you will work with `File` and `
 | `resolvingAlias()`    | Resolves the destination of the alias file | macOS only |
 | `createAlias()`       | Create a file/folder alias                 | macOS only |
 
-### File
+## File
 
 A `File` object represents a file. The file may or may exist yet.
 
@@ -134,28 +134,36 @@ try file.moveToTrash()
 
 ### General
 
-| API            | Description                                            |
-|:---------------|:-------------------------------------------------------|
-| `fileSize`     | The file's size in bytes                               |
-| `standardized` | Returns a File with a [standardised file path](https://developer.apple.com/documentation/foundation/nsurl/1414302-standardizingpath)  |
-| `actualize()`  | If the file doesn't exist, create the file on disk     |
+| API            | Description                                        |
+|:---------------|:---------------------------------------------------|
+| `fileSize`     | The file's size in bytes                           |
+| `standardized` | Returns a File with a [standardised file path](https://developer.apple.com/documentation/foundation/nsurl/1414302-standardizingpath) |
+| `actualize()`  | If the file doesn't exist, create the file on disk |
 
-### Folder
+### Temporary files
+
+| API                | Description              |
+|--------------------|--------------------------|
+| `File.Temporary()` | Returns a temporary file |
+
+
+## Folder
 
 A `Folder` object represents a folder.  The representation may or may not yet exist on disk
 
+### Temporary folders
 
-#### Temporary folders
+| API                            | Description                                                                    |
+|--------------------------------|--------------------------------------------------------------------------------|
+| `Folder.Temporary()`           | Returns a temporary folder                                                     |
+| `createUniqueFile()`           | Create a unique file within this folder                                        |
+| `createUniqueSubfolder()`      | Create a unique subfolder within this folder                                   |
+| `createUniqueDatedSubfolder()` | Create a unique subfolder within this folder of the form `<identifier>/<date>` |
 
-| API                             | Description                                                                      |
-|---------------------------------|----------------------------------------------------------------------------------|
-| `Folder.Temporary`              | Returns a temporary folder                                                       |
-| `createUniqueFile()`            | Create a unique file within this folder                                          |
-| `createUniqueSubfolder()`       | Create a unique subfolder within this folder                                     |
-| `Folder.Temporary(identifier) ` | Returns a temporary folder of the form `<temporary folder>/<identifier>/<date>/` |
-| `createUniqueDatedSubfolder()`  | Create a unique subfolder within this folder of the form `<identifier>/<date>`   |
 
-#### Locating files
+
+
+### Locating files
 
 | API                | Description                                                  |
 |:-------------------|:-------------------------------------------------------------|
@@ -164,7 +172,7 @@ A `Folder` object represents a folder.  The representation may or may not yet ex
 | `containsFile()`   | Does this folder contain a file with the specified name      |
 
 
-#### Generating files/folders
+### Generating files/folders
 
 | API                 | Description                                      |
 |:--------------------|:-------------------------------------------------|
@@ -172,7 +180,7 @@ A `Folder` object represents a folder.  The representation may or may not yet ex
 | `file()`            | A file in this folder with a specified name      |
 | `writeDataToFile()` | Write data to a file in this folder              |
 
-#### Folder Content
+### Folder Content
 
 | API                  | Description                                     | Notes                |
 |:---------------------|:------------------------------------------------|:---------------------|
@@ -182,7 +190,7 @@ A `Folder` object represents a folder.  The representation may or may not yet ex
 | `allSubfolders()`    | Returns just the subfolders of this folder      | Optionally recursive |
 | `allFiles()`         | Returns just the files contained in this folder | Optionally recursive |
 
-#### Common folder locations
+### Common folder locations
 
 | API                            | Description                         | Notes      |
 |:-------------------------------|:------------------------------------|:-----------|
@@ -196,11 +204,11 @@ A `Folder` object represents a folder.  The representation may or may not yet ex
 | `Folder.userTemporaryFolder()` | User's temporary folder             |            |
 | `Folder.userTrashFolder()`     | User's trash folder                 | macOS only |
 
-### Location Query (macOS only)
+## Location Query (macOS only)
 
 `LocationQuery` is a basic wrapper around Spotlight search with a callback syntax
 
-```
+```swift
 let q = LocationQuery()
 q.searchScopes = [try Folder.userLibraryFolder()]
 q.predicate = NSPredicate(format: "%K ENDSWITH '.txt'", NSMetadataItemFSNameKey)
@@ -212,10 +220,9 @@ q.start { foundItems in
 | API            | Description                                                            |
 |:---------------|:-----------------------------------------------------------------------|
 | `searchScopes` | The search scopes for the query (`URL`, `String` or `Folder`)          |
-| `predicate`    | The query predicate ([Syntax](https://developer.apple.com/library/archive/documentation/Carbon/Conceptual/SpotlightQuery/Concepts/QueryFormat.html#//apple_ref/doc/uid/TP40001849-CJBEJBHH))       |
+| `predicate`    | The query predicate ([Syntax](https://developer.apple.com/library/archive/documentation/Carbon/Conceptual/SpotlightQuery/Concepts/QueryFormat.html#//apple_ref/doc/uid/TP40001849-CJBEJBHH)) |
 | `start()`      | Start the query, providing a completion handler to receive the results |
 | `stop()`       | Stop a running query                                                   |
-
 
 ## License
 

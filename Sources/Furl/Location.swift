@@ -552,6 +552,34 @@ public struct File: Location, CustomDebugStringConvertible, Equatable {
 	public var fileSize: UInt64 { self.attributes[FileAttributeKey.size] as? UInt64 ?? .max }
 }
 
+public extension File {
+	/// Geerate a temporary file with a specified name
+	/// - Parameters:
+	///   - name: The temporary file's name
+	///   - create: If true creates an empty file on disk
+	/// - Returns: File
+	@inlinable static func Temporary(
+		named name: String,
+		create: Bool = false
+	) throws -> File {
+		try Folder.Temporary().file(name, createIfNotExist: create)
+	}
+
+	/// Create a temporary file of the form `<prefix>_<random>[.fileExtension]`
+	/// - Parameters:
+	///   - prefix: The filename's prefix (eg. tmp)
+	///   - fileExtension: The file's extension
+	///   - create: If true creates an empty file on disk
+	/// - Returns: File
+	@inlinable static func Temporary(
+		prefix: String = "tmp",
+		fileExtension: String = "",
+		create: Bool = false
+	) throws -> File {
+		try Folder.Temporary().createUniqueFile(prefix: prefix, fileExtension: fileExtension, create: create)
+	}
+}
+
 // MARK: - Folder
 
 /// A folder
