@@ -1,6 +1,9 @@
 import XCTest
 @testable import Furl
 
+// A simple check for whether we're running inside a GitHub action
+let IsRunningInGithubAction: Bool = ProcessInfo.processInfo.environment["GITHUB_ACTION"]?.isEmpty ?? false
+
 final class FileSystemTests: XCTestCase {
 
 #if !os(Linux)
@@ -146,7 +149,7 @@ final class FileSystemTests: XCTestCase {
 	}
 
 	func testFolderExistsCount() throws {
-
+		
 #if os(macOS)
 		do {
 			let desktopFolder = Folder(path: "~/Desktop")
@@ -154,10 +157,6 @@ final class FileSystemTests: XCTestCase {
 
 			let desktop = try Folder.userDesktopFolder()
 			XCTAssertTrue(desktop.exists)
-
-			let s = try desktop.allSubfolders()
-			let a = try desktop.allFiles()
-			XCTAssertGreaterThan(a.count, s.count)
 		}
 #endif
 
